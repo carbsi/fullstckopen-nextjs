@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { blogs } from "../lib/blogs";
 
 export default function BlogsPage() {
@@ -5,10 +6,15 @@ export default function BlogsPage() {
     <div>
       <h1>Blogs</h1>
 
+      <Link href="/blogs/new">Create new blog</Link>
+
       <ul>
         {blogs.map((blog) => (
           <li key={blog.id}>
-            <strong>{blog.title}</strong> – {blog.author}
+            <Link href={`/blogs/${blog.id}`}>
+              {blog.title}
+            </Link>{" "}
+            – {blog.author}
           </li>
         ))}
       </ul>
