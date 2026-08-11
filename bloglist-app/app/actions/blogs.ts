@@ -1,6 +1,6 @@
 "use server";
 
-import { blogs } from "../lib/blogs";
+import { blogs, likeBlog } from "../lib/blogs";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
@@ -22,4 +22,12 @@ export async function createBlog(formData: FormData) {
   revalidatePath("/blogs");
 
   redirect("/blogs");
+}
+
+export async function likeBlogAction(formData: FormData) {
+  const id = formData.get("id") as string;
+
+  likeBlog(id);
+
+  revalidatePath(`/blogs/${id}`);
 }
