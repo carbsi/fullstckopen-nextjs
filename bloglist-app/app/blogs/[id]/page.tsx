@@ -9,7 +9,7 @@ export default async function BlogPage({
 }) {
   const { id } = await params;
 
-  const blog = getBlogById(id);
+  const blog = await getBlogById(Number(id));
 
   if (!blog) {
   notFound();

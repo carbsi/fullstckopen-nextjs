@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { blogs } from "../lib/blogs";
+import { getBlogs } from "../lib/blogs";
 
 export default async function BlogsPage({
   searchParams,
@@ -7,6 +7,8 @@ export default async function BlogsPage({
   searchParams: Promise<{ filter?: string }>;
 }) {
   const { filter } = await searchParams;
+
+  const blogs = await getBlogs();
 
   const filteredBlogs = filter
     ? blogs.filter((blog) =>
