@@ -23,8 +23,15 @@ export default async function BlogPage({
       <p>Likes: {blog?.likes}</p>
 
       <form action={likeBlogAction}>
-        <input type="hidden" name="id" value={blog.id} />
-        <button type="submit">Like</button>
+        <input
+          type="hidden"
+          name="id"
+          value={blog?.id}
+        />
+      
+        <button type="submit">
+          Like
+        </button>
       </form>
     </div>
   );
