@@ -5,7 +5,11 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
 export async function createBlog(
-  prevState: { errors: Record<string, string>; values: { title: string; author: string; url: string } },
+  prevState: {
+    errors: Record<string, string>;
+    values: { title: string; author: string; url: string };
+    success: boolean;
+  },
   formData: FormData,
 ) {
 
@@ -25,13 +29,13 @@ if (!url || url.trim().length < 5) {
 }
 // palautuu virheiden lisäksi käyttäjän syöttämät arvot jotta lomake voi täyttää kentät uudelleen eikä käyttäjän tarvitse kirjoittaa alusta
 if (Object.keys(errors).length > 0) {
-  return { errors, values: { title, author, url } }
+  return { errors, values: { title, author, url }, success: false };
 }
 
 await addBlog(title, author, url);
 
   revalidatePath("/blogs");
-  redirect("/blogs");
+  return { errors: {}, values: { title: "", author: "", url: "" }, success: true };
 }
 
 export async function likeBlogAction(formData: FormData) {
