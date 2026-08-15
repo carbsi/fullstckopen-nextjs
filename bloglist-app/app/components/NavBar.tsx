@@ -14,11 +14,14 @@ export default function NavBar() {
 
       {session ? (
         <>
-          <em>{session.user?.name} logged in</em>{" "}
+          <em>{session.user?.name} logged in</em>{" | "}
           <button onClick={() => signOut()}>logout</button>
         </>
       ) : (
-        <Link href="/login">login</Link>
+        <>
+        <Link href="/login">login</Link>{" | "}
+        <Link href="/register">register</Link>
+        </>
       )}
     </nav>
   );
