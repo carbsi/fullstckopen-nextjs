@@ -5,6 +5,8 @@ export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
   name: text("name").notNull(),
+  // tallentaa vain salasanan hashin, ei itse salasanaa
+  passwordHash: text("password_hash").notNull().default(""),
 })
 
 export const blogs = pgTable("blogs", {
