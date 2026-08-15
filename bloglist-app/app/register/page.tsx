@@ -5,7 +5,7 @@ import { registerUser } from "../actions/users";
 export default function RegisterPage() {
   return (
     <div>
-      <h2>Register</h2>
+        <h2 className="text-xl font-bold mb-4">Register</h2>
 
       <form action={registerUser}>
         <div>
@@ -29,7 +29,7 @@ export default function RegisterPage() {
           </label>
         </div>
 
-        <button type="submit">Register</button>
+        <button type="submit" className="border px-3 py-1 rounded">Register</button>
       </form>
 
       <p>
