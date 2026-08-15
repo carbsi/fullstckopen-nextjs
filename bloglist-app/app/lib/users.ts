@@ -11,3 +11,27 @@ export const getUserById = async (id: number) => {
     where: eq(users.id, id),
   });
 };
+
+//export const getUserWithBlogs = async (username: string) => {
+//  return db.query.users.findFirst({
+//    where: eq(users.username, username),
+//    with: {
+//      blogs: true,
+//    },
+//  });
+//};
+
+export const getUserWithBlogs = async (username: string) => {
+  console.log("Haetaan käyttäjää:", username);
+
+  const user = await db.query.users.findFirst({
+    where: eq(users.username, username),
+    with: {
+      blogs: true,
+    },
+  });
+
+  console.log("Tietokannasta löytyi:", user);
+
+  return user;
+};
