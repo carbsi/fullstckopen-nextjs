@@ -24,6 +24,7 @@ export default function NavBar() {
             <Link href="/blogs/new" className="hover:text-gray-300">
               create new
             </Link>
+            <Link href="/me" className="hover:text-gray-300">me</Link>
             <em className="text-gray-300">{session.user?.name} logged in</em>
             <button
               onClick={() => signOut()}
@@ -32,6 +33,8 @@ export default function NavBar() {
               logout
             </button>
           </>
+
+
         ) : (
           <>
             <Link href="/login" className="hover:text-gray-300">

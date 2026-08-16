@@ -7,6 +7,7 @@ export const users = pgTable("users", {
   name: text("name").notNull(),
   // tallentaa vain salasanan hashin, ei itse salasanaa
   passwordHash: text("password_hash").notNull().default(""),
+  token: text("token"),
 })
 
 export const blogs = pgTable("blogs", {
