@@ -21,8 +21,9 @@ export default async function BlogsPage({
   );
 
   return (
-    <div>
+    <div className="max-w-2xl mx-auto p-6">
       <h1 className="mb-4 text-3xl font-bold">Blogs</h1>
+
       <form method="GET" className="my-4 flex gap-2">
         <input
           type="text"
@@ -31,7 +32,6 @@ export default async function BlogsPage({
           defaultValue={filter}
           className="rounded border border-gray-400 bg-white px-3 py-2 text-black"
         />
-      
         <button
           type="submit"
           className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
@@ -40,11 +40,19 @@ export default async function BlogsPage({
         </button>
       </form>
 
-      <Link href="/blogs/new">Create new blog</Link>
+      <Link
+        href="/blogs/new"
+        className="mb-4 inline-block text-blue-600 hover:underline"
+      >
+        Create new blog
+      </Link>
 
       <ul className="space-y-2">
         {sortedBlogs.map((blog) => (
-          <li key={blog.id}>
+          <li
+            key={blog.id}
+            className="rounded border border-gray-600 p-3 hover:bg-gray-800"
+          >
             <Link
               href={`/blogs/${blog.id}`}
               className="font-medium text-blue-600 hover:underline"
