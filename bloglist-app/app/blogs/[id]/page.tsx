@@ -1,5 +1,8 @@
 import { getBlogById } from "../../lib/blogs";
 import { likeBlogAction } from "../../actions/blogs";
+import { addToReadingListAction } from "../../actions/readinglist";
+import { getCurrentUser } from "../../services/session";
+import { isOnReadingList } from "../../services/readinglist";
 import { notFound } from "next/navigation";
 
 export default async function BlogPage({
@@ -12,8 +15,18 @@ export default async function BlogPage({
   const blog = await getBlogById(Number(id));
 
   if (!blog) {
-  notFound();
-}
+    notFound();
+  }
+
+  const user = await getCurrentUser();
+
+  // nappi näkyy vain kirjautuneelle joka ei ole itse lisännyt blogia
+  // eikä sitä ole jo hänen lukulistallaan
+  const showReadingListButton =
+    user !== null &&
+    user !== undefined &&
+    blog?.userId !== user.id &&
+    !(await isOnReadingList(user.id, Number(id)));
 
   return (
     <div className="max-w-2xl mx-auto p-6">
@@ -39,15 +52,29 @@ export default async function BlogPage({
         </p>
       </div>
 
-      <form action={likeBlogAction}>
-        <input type="hidden" name="id" value={blog?.id} />
-        <button
-          type="submit"
-          className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-        >
-          Like
-        </button>
-      </form>
+      <div className="flex items-center gap-2">
+        <form action={likeBlogAction}>
+          <input type="hidden" name="id" value={blog?.id} />
+          <button
+            type="submit"
+            className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+          >
+            Like
+          </button>
+        </form>
+
+        {showReadingListButton && (
+          <form action={addToReadingListAction}>
+            <input type="hidden" name="blogId" value={blog?.id} />
+            <button
+              type="submit"
+              className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
+            >
+              add to reading list
+            </button>
+          </form>
+        )}
+      </div>
     </div>
   );
 }

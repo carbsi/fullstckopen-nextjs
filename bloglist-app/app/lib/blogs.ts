@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "../../db";
-import { blogs } from "../../db/schema";
+import { blogs, readingList } from "../../db/schema";
+import { getCurrentUser } from "../services/session";
 
 export const getBlogs = async () => {
   return db.query.blogs.findMany();
@@ -17,12 +18,19 @@ export const addBlog = async (
   author: string,
   url: string
 ) => {
-  await db.insert(blogs).values({
-    title,
-    author,
-    url,
-    likes: 0,
-  });
+  const user = await getCurrentUser();
+  if (!user) {
+    throw new Error("Not logged in");
+  }
+
+  // returning() antaa luodun rivin jotta saadaan tietokannan generoima id
+  const [blog] = await db
+    .insert(blogs)
+    .values({ title, author, url, likes: 0, userId: user.id })
+    .returning();
+
+  // luotu blogi menee automaattisesti tekijän omalle lukulistalle
+  await db.insert(readingList).values({ userId: user.id, blogId: blog.id });
 };
 
 export const likeBlog = async (id: number) => {
