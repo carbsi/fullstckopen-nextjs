@@ -22,3 +22,11 @@ export const isOnReadingList = async (userId: number, blogId: number) => {
   })
   return Boolean(entry)
 }
+
+// userId on mukana where ehdossa jotta käyttäjä ei voi merkitä toisen käyttäjän merkintöjä luetuiksi väärentämällä entryIdn lomakkeella
+export const markAsRead = async (userId: number, entryId: number) => {
+  await db
+    .update(readingList)
+    .set({ read: true })
+    .where(and(eq(readingList.id, entryId), eq(readingList.userId, userId)))
+}
