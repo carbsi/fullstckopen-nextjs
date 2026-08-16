@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Blog App",
-  description: "Blog application",
+  description: "Blog app built with Next.js",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
