@@ -71,7 +71,7 @@ export default function NewBlogPage() {
           )}
         </div>
 
-        <button type="submit" className="border px-3 py-1 w-fit">
+        <button type="submit" data-testid="create-blog-button" className="border px-3 py-1 w-fit">
           Create
         </button>
       </form>

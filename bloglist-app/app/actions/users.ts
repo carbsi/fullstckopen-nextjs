@@ -9,7 +9,10 @@ import { users } from "../../db/schema";
 import { getCurrentUser } from "../services/session";
 
 export const registerUser = async (
-  prevState: { error: string },
+  prevState: {
+    errors: Record<string, string>;
+    values: { username: string; name: string };
+  },
   formData: FormData
 ) => {
   const username = (formData.get("username") as string)?.trim();
@@ -17,30 +20,39 @@ export const registerUser = async (
   const password = formData.get("password") as string;
   const passwordConfirm = formData.get("passwordConfirm") as string;
 
-  // tarkistetaan rekisteröinnin ehdot ennen tietokantaan kirjoittamista
+  // kerätään kaikki virheet olioon, jotta käyttäjä näkee ne kerralla
+  // kenttiensä vieressä eikä yksi kerrallaan
+  const errors: Record<string, string> = {};
+
   if (!username || username.length < 4) {
-    return { error: "Username must be at least 4 characters long" };
+    errors.username = "Username must be at least 4 characters long";
   }
 
   if (!password || password.length < 4) {
-    return { error: "Password must be at least 4 characters long" };
+    errors.password = "Password must be at least 4 characters long";
   }
 
   if (password !== passwordConfirm) {
-    return { error: "Passwords do not match" };
-  }
-// tarkistus ettei samalla käyttäjänimellä ole jo käyttäjää
-  const existingUser = await db.query.users.findFirst({
-    where: eq(users.username, username),
-  });
-
-  if (existingUser) {
-    return { error: "Username is already taken" };
+    errors.passwordConfirm = "Passwords do not match";
   }
 
-// kerroin 10 yleisenä oletuksena, koska se on riittävän hidas estämään
-// brute-force hyökkäyksiä, muttei liian hidas ärsyttämään
-// jos haluaa lisätä turvallisuutta täytyy kasvattaa kerrointa, mutta se hidastaa myös kirjautumista
+  // tietokantakysely vasta muiden tarkistusten jälkeen
+  if (!errors.username) {
+    const existingUser = await db.query.users.findFirst({
+      where: eq(users.username, username),
+    });
+
+    if (existingUser) {
+      errors.username = "Username is already taken";
+    }
+  }
+
+  if (Object.keys(errors).length > 0) {
+    return { errors, values: { username, name } };
+  }
+
+  // kerroin 10 yleisenä oletuksena: riittävän hidas estämään brute-force
+  // hyökkäyksiä, muttei niin hidas että kirjautuminen kärsii
   const passwordHash = await bcrypt.hash(password, 10);
 
   await db.insert(users).values({
@@ -49,10 +61,10 @@ export const registerUser = async (
     passwordHash,
   });
 
-  redirect("/login")
+  redirect("/login");
 };
 
-  export const generateToken = async () => {
+export const generateToken = async () => {
   const user = await getCurrentUser()
   if (!user) {
     redirect("/login")

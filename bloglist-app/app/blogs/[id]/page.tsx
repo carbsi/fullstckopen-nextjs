@@ -29,12 +29,13 @@ export default async function BlogPage({
     !(await isOnReadingList(user.id, Number(id)));
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h1 className="mb-4 text-3xl font-bold">{blog?.title}</h1>
+    <div data-testid="blog-detail" className="max-w-2xl mx-auto p-6">
+      <h1 data-testid="blog-title" className="mb-4 text-3xl font-bold">{blog?.title}</h1>
 
       <div className="space-y-1 mb-6">
         <p>
-          <span className="text-gray-400">Author:</span> {blog?.author}
+          <span className="text-gray-400">Author:</span>{" "}
+          <span data-testid="blog-author">{blog?.author}</span>
         </p>
         <p>
           <span className="text-gray-400">URL:</span>{" "}
@@ -67,7 +68,7 @@ export default async function BlogPage({
           <form action={addToReadingListAction}>
             <input type="hidden" name="blogId" value={blog?.id} />
             <button
-              type="submit"
+              type="submit" data-testid="add-to-reading-list-button"
               className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
             >
               add to reading list

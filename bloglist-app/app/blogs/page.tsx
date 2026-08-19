@@ -28,12 +28,13 @@ export default async function BlogsPage({
         <input
           type="text"
           name="filter"
+          data-testid="filter-input"
           placeholder="Search by title"
           defaultValue={filter}
           className="rounded border border-gray-400 bg-white px-3 py-2 text-black"
         />
         <button
-          type="submit"
+          type="submit" data-testid="search-button"
           className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
         >
           Search
@@ -47,7 +48,7 @@ export default async function BlogsPage({
         Create new blog
       </Link>
 
-      <ul className="space-y-2">
+      <ul data-testid="blogs-list" className="space-y-2">
         {sortedBlogs.map((blog) => (
           <li
             key={blog.id}
